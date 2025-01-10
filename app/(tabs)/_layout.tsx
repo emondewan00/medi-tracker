@@ -1,5 +1,4 @@
 import { Tabs } from "expo-router";
-import { Text, View } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome5";
 
 export default function RootLayout() {
@@ -7,29 +6,35 @@ export default function RootLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        // tabBarShowLabel: false,
-        tabBarStyle: {
-          backgroundColor: "white",
-          position: "absolute",
-          borderTopColor: "#0061FF1A",
-          borderTopWidth: 1,
-          minHeight: 70,
-          padding: 0,
-          paddingTop: 10,
-        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          tabBarIcon: ({ focused, color }) => (
-            <FontAwesome name={"home"} size={24} color={color} />
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name={"home"} size={size} color={color} />
           ),
           tabBarLabel: "Home",
         }}
       />
-      <Tabs.Screen name="addNew" />
-      <Tabs.Screen name="profile" />
+      <Tabs.Screen
+        name="addNew"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="plus" size={size} color={color} />
+          ),
+          tabBarLabel: "Add New",
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="user" size={size} color={color} />
+          ),
+          tabBarLabel: "Profile",
+        }}
+      />
     </Tabs>
   );
 }
