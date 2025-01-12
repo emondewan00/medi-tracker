@@ -1,14 +1,16 @@
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import InputWithLabel from "@/components/InputWithLabel";
 import { Link } from "expo-router";
 
-const SignIn = () => {
+const SignUp = () => {
+  const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const onPressLogin = () => {
+  const onPressSignUp = () => {
     console.log({
+      name,
       email,
       password,
     });
@@ -17,13 +19,16 @@ const SignIn = () => {
   return (
     <View className="bg-white flex-1 p-8 flex flex-col justify-center">
       <Text className="text-3xl font-bold my-4 text-center ">
-        Let's Sign You In
-      </Text>
-      <Text className="text-3xl font-semibold  text-center text-primary">
-        Welcome Back You've been missed
+        Let's Sign You Up
       </Text>
 
       <View>
+        <InputWithLabel
+          value={name}
+          onChangeText={setName}
+          label="Full Name"
+          placeholder="Full Name"
+        />
         <InputWithLabel
           value={email}
           onChangeText={setEmail}
@@ -37,17 +42,17 @@ const SignIn = () => {
           placeholder="Enter your password"
         />
         <TouchableOpacity
-          onPress={onPressLogin}
+          onPress={onPressSignUp}
           className="bg-primary p-4 rounded-full mt-4"
         >
           <Text className="text-white text-lg font-bold text-center">
-            Sign In
+            Sign Up
           </Text>
         </TouchableOpacity>
         <Text className="mt-4 text-lg">
-          Have not any account?{" "}
-          <Link href={"/sign-up"} className="text-primary">
-            Create
+          Already hove you account?{" "}
+          <Link href={"/sign-in"} className="text-primary">
+            Sign In
           </Link>{" "}
           instead.
         </Text>
@@ -56,4 +61,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
