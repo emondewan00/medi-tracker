@@ -17,6 +17,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Colors from "@/constant/Colors";
 import { TypeList, WhenToTake } from "@/constant/Options";
+import { router } from "expo-router";
 
 type FromValue = {
   name: string;
@@ -57,7 +58,10 @@ const AddMedicine = () => {
             alt="consult image"
           />
 
-          <Pressable className="absolute top-4 left-4">
+          <Pressable
+            onPress={() => router.back()}
+            className="absolute top-4 left-4"
+          >
             <FontAwesome5 name={"arrow-left"} size={24} />
           </Pressable>
         </View>

@@ -1,6 +1,7 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import medicine from "@/assets/images/medicine.png";
+import { router } from "expo-router";
 
 const EmptyMedication = () => {
   return (
@@ -17,7 +18,10 @@ const EmptyMedication = () => {
       <Text className="text-base text-grayCS mt-2">
         You have 0 Medication Setup,please setup a new one.
       </Text>
-      <TouchableOpacity className="bg-primary p-4 rounded-md mt-4 w-full">
+      <TouchableOpacity
+        onPress={() => router.push("/add-medicine")}
+        className="bg-primary p-4 rounded-md mt-4 w-full"
+      >
         <Text className="text-white text-center">+ Add New Medication</Text>
       </TouchableOpacity>
     </View>
