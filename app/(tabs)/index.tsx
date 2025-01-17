@@ -58,7 +58,7 @@ export default function Index() {
               contentContainerClassName="gap-x-4 my-3"
             />
             <View className="gap-y-4">
-              <View className="bg-[#C5C9FF] rounded-xl flex-row p-4 gap-x-4">
+              <View className="bg-[#C5C9FF] rounded-xl flex-row p-4 gap-x-4 border border-lightGrayBorder">
                 <View className="p-4 bg-white rounded-lg items-center ">
                   <Image
                     source={{
@@ -79,7 +79,7 @@ export default function Index() {
                   <Text className="font-semibold">5 minutes</Text>
                 </View>
               </View>
-              <View className="bg-[#C5C9FF] rounded-xl flex-row p-4 gap-x-4">
+              <View className="bg-[#C5C9FF] rounded-xl flex-row p-4 gap-x-4 border border-lightGrayBorder">
                 <View className="p-4 bg-white rounded-lg items-center ">
                   <Image
                     source={{
@@ -110,6 +110,7 @@ export default function Index() {
           </Link>
          */}
         </View>
+        <Link href={"/notify"}>notify </Link>
       </View>
     </ScrollView>
   );
