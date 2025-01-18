@@ -8,7 +8,7 @@ const SignUp = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const { createUserEmailPass } = useAuth();
+  const { createUserEmailPass, user } = useAuth();
 
   const onPressSignUp = async () => {
     try {
@@ -18,6 +18,8 @@ const SignUp = () => {
     }
   };
 
+  console.log(user,"sign up page ");
+  
   return (
     <View className="bg-white flex-1 p-8 flex flex-col justify-center">
       <Text className="text-3xl font-bold my-4 text-center ">

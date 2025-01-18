@@ -1,18 +1,20 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  type PropsWithChildren,
-} from "react";
-import { auth } from "@/firebase.config";
-import { createUserWithEmailAndPassword, User } from "firebase/auth";
 import { AuthContext } from "@/context";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  User,
+} from "firebase/auth";
+import { type PropsWithChildren, useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { auth } from "@/firebase.config";
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
 
+  // Sign up with email and password
   const createUserEmailPass = async (
     email: string,
     password: string
@@ -25,17 +27,70 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         email,
         password
       );
+
+      // await AsyncStorage.setItem("user", "");
       setUser(user);
       setStatus("idle");
     } catch (err: any) {
       setStatus("error");
-      setError(err.message || "An error occurred");
+      setError(err.message || "An error occurred during sign-up.");
       console.error("Error creating user", err);
     }
   };
-console.log(user,"user from auth provider")
+
+  // Login with email and password
+  const loginUserEmailPass = async (
+    email: string,
+    password: string
+  ): Promise<void> => {
+    setStatus("loading");
+    setError(null);
+    try {
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      setUser(user);
+      setStatus("idle");
+    } catch (err: any) {
+      setStatus("error");
+      setError(err.message || "An error occurred during login.");
+      console.error("Error logging in user", err);
+    }
+  };
+
+  // Logout the user
+  const logout = async (): Promise<void> => {
+    setStatus("loading");
+    try {
+      await auth.signOut();
+      setUser(null);
+      setStatus("idle");
+    } catch (err: any) {
+      setStatus("error");
+      setError(err.message || "An error occurred during logout.");
+      console.error("Error logging out", err);
+    }
+  };
+
+  // Track user state changes for persistence
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, status, error, createUserEmailPass }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        status,
+        error,
+        createUserEmailPass,
+        loginUserEmailPass,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

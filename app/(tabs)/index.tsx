@@ -12,9 +12,12 @@ import EmptyMedication from "@/components/EmptyMedication";
 import medicine from "@/assets/images/medication.jpeg";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
+import useAuth from "@/hooks/useAuth";
 
 export default function Index() {
   const [selectedDate, setSelectedDate] = useState(1);
+  const { user } = useAuth();
+  console.log(user);
   return (
     <ScrollView className=" flex-1 bg-white h-full">
       <View>

@@ -2,18 +2,19 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import InputWithLabel from "@/components/InputWithLabel";
 import { Link } from "expo-router";
+import useAuth from "@/hooks/useAuth";
 
 const SignIn = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
-  const onPressLogin = () => {
-    console.log({
-      email,
-      password,
-    });
+  const { loginUserEmailPass } = useAuth();
+  const onPressLogin = async () => {
+    try {
+      await loginUserEmailPass(email, password);
+    } catch (error) {
+      console.error(error);
+    }
   };
-
   return (
     <View className="bg-white flex-1 p-8 flex flex-col justify-center">
       <Text className="text-3xl font-bold my-4 text-center ">

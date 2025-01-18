@@ -6,6 +6,8 @@ export type AuthContextType = {
   status: "idle" | "loading" | "error";
   error: string | null;
   createUserEmailPass: (email: string, password: string) => Promise<void>;
+  loginUserEmailPass: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
