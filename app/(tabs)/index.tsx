@@ -111,6 +111,7 @@ export default function Index() {
          */}
         </View>
         <Link href={"/notify"}>notify </Link>
+        <Link href={"/sign-up"}>sign up </Link>
       </View>
     </ScrollView>
   );

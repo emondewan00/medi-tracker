@@ -2,18 +2,20 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import InputWithLabel from "@/components/InputWithLabel";
 import { Link } from "expo-router";
+import useAuth from "@/hooks/useAuth";
 
 const SignUp = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const { createUserEmailPass } = useAuth();
 
-  const onPressSignUp = () => {
-    console.log({
-      name,
-      email,
-      password,
-    });
+  const onPressSignUp = async () => {
+    try {
+      await createUserEmailPass(email, password);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
