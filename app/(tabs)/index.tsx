@@ -12,18 +12,10 @@ import HomeHeader from "@/components/HomeHeader";
 import EmptyMedication from "@/components/EmptyMedication";
 import medicine from "@/assets/images/medication.jpeg";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useEffect, useState } from "react";
-import useAuth from "@/hooks/useAuth";
+import { useState } from "react";
 
 export default function Index() {
   const [selectedDate, setSelectedDate] = useState(1);
-  const { user, status, logout } = useAuth();
-
-  useEffect(() => {
-    if (!user && status === "idle") {
-      // router.push("/on-boarding");
-    }
-  }, [user]);
 
   return (
     <ScrollView className=" flex-1 bg-white h-full">
@@ -121,7 +113,6 @@ export default function Index() {
 
           <Link href={"/notify"}>notify </Link>
           <Link href={"/sign-up"}>sign up </Link>
-          <Button onPress={logout} title="Logout" />
         </View>
       </View>
     </ScrollView>

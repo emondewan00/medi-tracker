@@ -9,10 +9,13 @@ import {
 import { type PropsWithChildren, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { auth } from "@/firebase.config";
+import { router } from "expo-router";
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(null);
-  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [status, setStatus] = useState<"loading" | "error" | "success">(
+    "loading"
+  );
   const [error, setError] = useState<string | null>(null);
 
   // Sign up with email and password
@@ -29,16 +32,15 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         email,
         password
       );
-      await updateProfile(user, {
-        displayName: name,
-      });
 
-      // await AsyncStorage.setItem("user", "");
+      // Update user profile with display name
+      await updateProfile(user, { displayName: name });
+
       setUser(user);
-      setStatus("idle");
+      setStatus("success");
     } catch (err: any) {
       setStatus("error");
-      setError(err.message || "An error occurred during sign-up.");
+      setError(err.message || "An error occurred during signup.");
       console.error("Error creating user", err);
     }
   };
@@ -53,7 +55,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     try {
       const { user } = await signInWithEmailAndPassword(auth, email, password);
       setUser(user);
-      setStatus("idle");
+      setStatus("success");
     } catch (err: any) {
       setStatus("error");
       setError(err.message || "An error occurred during login.");
@@ -67,8 +69,8 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     try {
       await auth.signOut();
       setUser(null);
-      await AsyncStorage.removeItem("user");
-      setStatus("idle");
+      setStatus("success");
+      router.push("/on-boarding");
     } catch (err: any) {
       setStatus("error");
       setError(err.message || "An error occurred during logout.");
@@ -80,10 +82,14 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     setStatus("loading");
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        router.push("/on-boarding");
+      }
     });
 
-    setStatus("idle");
+    setStatus("success");
     // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);

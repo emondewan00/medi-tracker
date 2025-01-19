@@ -3,7 +3,7 @@ import { createContext } from "react";
 
 export type AuthContextType = {
   user: User | null;
-  status: "idle" | "loading" | "error";
+  status: "success" | "loading" | "error";
   error: string | null;
   createUserEmailPass: (
     email: string,
