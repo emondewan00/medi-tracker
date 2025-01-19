@@ -72,10 +72,28 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
 
   // Track user state changes for persistence
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    setStatus("loading");
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      try {
+        if (currentUser) {
+          // Store current user in AsyncStorage
+          await AsyncStorage.setItem("user", JSON.stringify(currentUser));
+          setUser(currentUser);
+        } else {
+          // Retrieve user from AsyncStorage if logged out
+          const user = await AsyncStorage.getItem("user");
+          if (user) {
+            setUser(JSON.parse(user));
+          } else {
+            setUser(null);
+          }
+        }
+      } catch (error) {
+        console.error("Error handling auth state change:", error);
+      }
     });
 
+    setStatus("idle");
     // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);

@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import {
   FlatList,
   Image,
@@ -11,13 +11,19 @@ import HomeHeader from "@/components/HomeHeader";
 import EmptyMedication from "@/components/EmptyMedication";
 import medicine from "@/assets/images/medication.jpeg";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 
 export default function Index() {
   const [selectedDate, setSelectedDate] = useState(1);
-  const { user } = useAuth();
-  console.log(user);
+  const { user, status } = useAuth();
+
+  useEffect(() => {
+    if (!!user && status === "loading") {
+      router.push("/sign-in");
+    }
+  }, [user]);
+
   return (
     <ScrollView className=" flex-1 bg-white h-full">
       <View>
@@ -106,15 +112,15 @@ export default function Index() {
             </View>
           </View>
 
-          {/* <EmptyMedication />
+          {/* <EmptyMedication /> */}
 
           <Link href={"/on-boarding"} className="">
             On boarding
           </Link>
-         */}
+
+          <Link href={"/notify"}>notify </Link>
+          <Link href={"/sign-up"}>sign up </Link>
         </View>
-        <Link href={"/notify"}>notify </Link>
-        <Link href={"/sign-up"}>sign up </Link>
       </View>
     </ScrollView>
   );

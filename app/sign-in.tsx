@@ -1,7 +1,7 @@
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import InputWithLabel from "@/components/InputWithLabel";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import useAuth from "@/hooks/useAuth";
 
 const SignIn = () => {
@@ -11,6 +11,7 @@ const SignIn = () => {
   const onPressLogin = async () => {
     try {
       await loginUserEmailPass(email, password);
+      router.push("/");
     } catch (error) {
       console.error(error);
     }
