@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import InputWithLabel from "@/components/InputWithLabel";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import useAuth from "@/hooks/useAuth";
 
 const SignUp = () => {
@@ -12,14 +12,15 @@ const SignUp = () => {
 
   const onPressSignUp = async () => {
     try {
-      await createUserEmailPass(email, password);
+      await createUserEmailPass(email, password, name);
+      router.push("/");
     } catch (error) {
       console.error(error);
     }
   };
 
-  console.log(user,"sign up page ");
-  
+  console.log(user, "sign up page ");
+
   return (
     <View className="bg-white flex-1 p-8 flex flex-col justify-center">
       <Text className="text-3xl font-bold my-4 text-center ">

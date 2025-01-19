@@ -1,5 +1,6 @@
 import { Link, router } from "expo-router";
 import {
+  Button,
   FlatList,
   Image,
   ScrollView,
@@ -16,11 +17,11 @@ import useAuth from "@/hooks/useAuth";
 
 export default function Index() {
   const [selectedDate, setSelectedDate] = useState(1);
-  const { user, status } = useAuth();
+  const { user, status, logout } = useAuth();
 
   useEffect(() => {
-    if (!!user && status === "loading") {
-      router.push("/sign-in");
+    if (!user && status === "idle") {
+      // router.push("/on-boarding");
     }
   }, [user]);
 
@@ -120,6 +121,7 @@ export default function Index() {
 
           <Link href={"/notify"}>notify </Link>
           <Link href={"/sign-up"}>sign up </Link>
+          <Button onPress={logout} title="Logout" />
         </View>
       </View>
     </ScrollView>

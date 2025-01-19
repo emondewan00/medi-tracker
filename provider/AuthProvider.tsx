@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  updateProfile,
   User,
 } from "firebase/auth";
 import { type PropsWithChildren, useEffect, useState } from "react";
@@ -17,7 +18,8 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   // Sign up with email and password
   const createUserEmailPass = async (
     email: string,
-    password: string
+    password: string,
+    name: string
   ): Promise<void> => {
     setStatus("loading");
     setError(null);
@@ -27,6 +29,9 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         email,
         password
       );
+      await updateProfile(user, {
+        displayName: name,
+      });
 
       // await AsyncStorage.setItem("user", "");
       setUser(user);
@@ -62,6 +67,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     try {
       await auth.signOut();
       setUser(null);
+      await AsyncStorage.removeItem("user");
       setStatus("idle");
     } catch (err: any) {
       setStatus("error");
@@ -73,24 +79,8 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   // Track user state changes for persistence
   useEffect(() => {
     setStatus("loading");
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      try {
-        if (currentUser) {
-          // Store current user in AsyncStorage
-          await AsyncStorage.setItem("user", JSON.stringify(currentUser));
-          setUser(currentUser);
-        } else {
-          // Retrieve user from AsyncStorage if logged out
-          const user = await AsyncStorage.getItem("user");
-          if (user) {
-            setUser(JSON.parse(user));
-          } else {
-            setUser(null);
-          }
-        }
-      } catch (error) {
-        console.error("Error handling auth state change:", error);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
     });
 
     setStatus("idle");
