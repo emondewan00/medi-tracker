@@ -2,7 +2,6 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import notification from "@/assets/images/notification.gif";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { auth} from "@/config/firebase.config";
 
 const Notify = () => {
   return (

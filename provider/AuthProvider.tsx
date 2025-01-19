@@ -82,11 +82,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     setStatus("loading");
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        router.push("/on-boarding");
-      }
+      setUser(currentUser);
     });
 
     setStatus("success");
