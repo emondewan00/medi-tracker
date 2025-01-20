@@ -7,6 +7,7 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
@@ -18,21 +19,30 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import Colors from "@/constant/Colors";
 import { TypeList, WhenToTake } from "@/constant/Options";
 import { router } from "expo-router";
+import { collection, addDoc } from "firebase/firestore";
+import { fireStore } from "@/firebase.config";
+import useAuth from "@/hooks/useAuth";
+import MedicineHeader from "@/components/add-medicine/MedicineHeader";
 
-type FromValue = {
+type InputValue = {
   name: string;
   type: string;
   whenToTake: string;
   frequency: string;
+};
+
+interface FromValue extends InputValue {
   startTime: Date | undefined;
   endTime: undefined | Date;
   reminder: undefined | Date;
-};
+}
 
 const AddMedicine = () => {
   const [showStartTime, setShowStartTime] = useState(false);
   const [showEndTime, setShowEndTime] = useState(false);
   const [showReminder, setShowReminder] = useState(false);
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
   const [fromValue, setFromValue] = useState<FromValue>({
     name: "",
     type: "Tablet",
@@ -45,26 +55,28 @@ const AddMedicine = () => {
   const changeFromValue = (name: string, value: string | Date | undefined) => {
     setFromValue({ ...fromValue, [name]: value });
   };
-  console.log(fromValue);
+
+  const onPress = async (data: any) => {
+    try {
+      setLoading(true);
+      const docRef = await addDoc(collection(fireStore, "medicine"), {
+        ...data,
+        email: user?.email,
+      });
+      console.log(docRef, "document written with ID");
+    } catch (error) {
+      console.error(error, "error writing document");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ScrollView>
       <View>
-        <View className="relative">
-          <Image
-            className="w-full h-60
-          "
-            source={consult}
-            resizeMode="cover"
-            alt="consult image"
-          />
+        <MedicineHeader />
 
-          <Pressable
-            onPress={() => router.back()}
-            className="absolute top-4 left-4"
-          >
-            <FontAwesome5 name={"arrow-left"} size={24} />
-          </Pressable>
-        </View>
+        {/* form  inputs */}
         <View className="mt-8 px-6 gap-y-4">
           <Text className="text-2xl font-bold">Add New Medication</Text>
 
@@ -271,17 +283,31 @@ const AddMedicine = () => {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity className="flex-row items-center bg-primary justify-center rounded-md gap-x-2">
-            <AntDesign
-              name="pluscircle"
-              size={20}
-              style={{
-                color: "white",
-              }}
-            />
-            <Text className="text-xl font-bold  py-4 text-center text-white ">
-              Add Medication
-            </Text>
+          <TouchableOpacity
+            onPress={() => onPress(fromValue)}
+            disabled={loading}
+            className="flex-row items-center bg-primary justify-center rounded-md gap-x-2"
+          >
+            {loading ? (
+              <ActivityIndicator
+                size={"large"}
+                color="white"
+                className="py-2"
+              />
+            ) : (
+              <>
+                <AntDesign
+                  name="pluscircle"
+                  size={20}
+                  style={{
+                    color: "white",
+                  }}
+                />
+                <Text className="text-xl font-bold  py-4 text-center text-white ">
+                  Add Medication
+                </Text>
+              </>
+            )}
           </TouchableOpacity>
         </View>
       </View>

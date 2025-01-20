@@ -11,6 +11,8 @@ const SignIn = () => {
   const onPressLogin = async () => {
     try {
       await loginUserEmailPass(email, password);
+      setEmail("");
+      setPassword("");
       router.push("/");
     } catch (error) {
       console.error(error);

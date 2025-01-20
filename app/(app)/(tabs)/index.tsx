@@ -61,7 +61,7 @@ export default function Index() {
               contentContainerClassName="gap-x-4 my-3"
             />
             <View className="gap-y-4">
-              <View className="bg-[#C5C9FF] rounded-xl flex-row p-4 gap-x-4 border border-lightGrayBorder">
+              <View className="bg-blue-400 rounded-xl flex-row p-4 gap-x-4 border border-lightGrayBorder">
                 <View className="p-4 bg-white rounded-lg items-center ">
                   <Image
                     source={{
@@ -73,8 +73,10 @@ export default function Index() {
                   />
                 </View>
                 <View>
-                  <Text className="text-xl font-semibold">Ibrupain</Text>
-                  <Text className="font-medium">Before Diner</Text>
+                  <Text className="text-xl font-semibold text-white">
+                    Ibrupain
+                  </Text>
+                  <Text className="font-medium text-white">Before Diner</Text>
                   <Text className="text-white">2 Capsules</Text>
                 </View>
                 <View className="bg-white rounded-md p-2 items-center justify-center ml-auto">
@@ -82,7 +84,7 @@ export default function Index() {
                   <Text className="font-semibold">5 minutes</Text>
                 </View>
               </View>
-              <View className="bg-[#C5C9FF] rounded-xl flex-row p-4 gap-x-4 border border-lightGrayBorder">
+              <View className="bg-blue-400 rounded-xl flex-row p-4 gap-x-4 border border-lightGrayBorder">
                 <View className="p-4 bg-white rounded-lg items-center ">
                   <Image
                     source={{
@@ -94,8 +96,10 @@ export default function Index() {
                   />
                 </View>
                 <View>
-                  <Text className="text-xl font-semibold">Ibrupain</Text>
-                  <Text className="font-medium">Before Diner</Text>
+                  <Text className="text-xl font-semibold text-white">
+                    Ibrupain
+                  </Text>
+                  <Text className="font-medium text-white">Before Diner</Text>
                   <Text className="text-white">2 Capsules</Text>
                 </View>
                 <View className="bg-white rounded-md p-2 items-center justify-center ml-auto">
@@ -114,6 +118,7 @@ export default function Index() {
 
           <Link href={"/notify"}>notify </Link>
           <Link href={"/sign-up"}>sign up </Link>
+          <Link href={"/add-medicine"}>Add medicine</Link>
           <Button title="Logout" onPress={logout} />
         </View>
       </View>

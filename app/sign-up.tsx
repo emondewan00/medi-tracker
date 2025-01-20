@@ -13,6 +13,9 @@ const SignUp = () => {
   const onPressSignUp = async () => {
     try {
       await createUserEmailPass(email, password, name);
+      setEmail("");
+      setName("");
+      setPassword("");
       router.push("/");
     } catch (error) {
       console.error(error);
