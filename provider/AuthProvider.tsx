@@ -83,9 +83,9 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     setStatus("loading");
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setStatus("success");
     });
 
-    setStatus("success");
     // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
