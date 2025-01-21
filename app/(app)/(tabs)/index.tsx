@@ -12,12 +12,29 @@ import HomeHeader from "@/components/HomeHeader";
 import EmptyMedication from "@/components/EmptyMedication";
 import medicine from "@/assets/images/medication.jpeg";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
+import sevenDayTime from "@/utils/sevenDayTime";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { fireStore } from "@/firebase.config";
 
 export default function Index() {
-  const [selectedDate, setSelectedDate] = useState(1);
-  const { logout } = useAuth();
+  const [selectedDate, setSelectedDate] = useState(0);
+  const { logout, user } = useAuth();
+
+  useEffect(() => {
+    const getMedications = async () => {
+      const medicineRef = collection(fireStore, "medicine");
+
+      const documents = query(medicineRef, where("email", "==", user?.email));
+
+      const medications = await getDocs(documents);
+
+      console.log(medications.docs, medications.size);
+    };
+    getMedications();
+  }, []);
+
   return (
     <ScrollView className=" flex-1 bg-white h-full">
       <View>
@@ -34,27 +51,28 @@ export default function Index() {
 
             <FlatList
               horizontal
-              data={[1, 2, 3]}
+              showsHorizontalScrollIndicator={false}
+              data={sevenDayTime()}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  onPress={() => setSelectedDate(item)}
+                  onPress={() => setSelectedDate(item.id)}
                   className={` py-4 px-7 border-lightGrayBorder border rounded-md ${
-                    item === selectedDate ? "bg-primary" : "bg-gray-50"
+                    item.id === selectedDate ? "bg-primary" : "bg-gray-50"
                   }`}
                 >
                   <Text
                     className={`text-lg font-medium ${
-                      item === selectedDate ? "text-white" : "text-black"
+                      item.id === selectedDate ? "text-white" : "text-black"
                     }`}
                   >
-                    Fr
+                    {item.day}
                   </Text>
                   <Text
                     className={`text-xl font-semibold ${
-                      item === selectedDate ? "text-white" : "text-black"
+                      item.id === selectedDate ? "text-white" : "text-black"
                     }`}
                   >
-                    {item}
+                    {item.date}
                   </Text>
                 </TouchableOpacity>
               )}

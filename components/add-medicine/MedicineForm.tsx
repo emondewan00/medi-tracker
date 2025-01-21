@@ -18,24 +18,12 @@ import { collection, addDoc } from "firebase/firestore";
 import { fireStore } from "@/firebase.config";
 import useAuth from "@/hooks/useAuth";
 import DateInput from "./DateInput";
-
-type InputValue = {
-  name: string;
-  type: string;
-  whenToTake: string;
-  frequency: string;
-};
-
-interface FormValue extends InputValue {
-  startTime: Date;
-  endTime: undefined | Date;
-  reminder: undefined | Date;
-}
+import { MedicineDoc } from "@/types";
 
 const MedicineForm = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
-  const [formValue, setFormValue] = useState<FormValue>({
+  const [formValue, setFormValue] = useState<MedicineDoc>({
     name: "",
     type: "Tablet",
     whenToTake: "When To Take",
@@ -43,6 +31,7 @@ const MedicineForm = () => {
     startTime: new Date(),
     endTime: undefined,
     reminder: undefined,
+    status: "pending",
   });
 
   const changeFormValue = (name: string, value: string | Date | undefined) => {
@@ -56,7 +45,6 @@ const MedicineForm = () => {
         ...data,
         email: user?.email,
       });
-      console.log(docRef, "document written with ID");
     } catch (error) {
       console.error(error, "error writing document");
     } finally {
