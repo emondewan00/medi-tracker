@@ -10,7 +10,7 @@ type InputValue = {
 interface MedicineDoc extends InputValue {
   startTime: number;
   endTime: undefined | number;
-  reminder: undefined | Date;
+  reminder: undefined | number;
   status: "pending" | "taken" | "missed";
 }
 

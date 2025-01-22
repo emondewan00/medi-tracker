@@ -20,6 +20,8 @@ import useAuth from "@/hooks/useAuth";
 import DateInput from "./DateInput";
 import { MedicineDoc } from "@/types";
 import dateRangeArray from "@/utils/dateRangeArray";
+import Toast from "react-native-toast-message";
+import { router } from "expo-router";
 
 const MedicineForm = () => {
   const [loading, setLoading] = useState(false);
@@ -55,6 +57,26 @@ const MedicineForm = () => {
           formValue.endTime as number
         ),
       });
+      Toast.show({
+        type: "success",
+        text1: "Medication added successfully",
+      });
+      setFormValue({
+        name: "",
+        type: {
+          name: "Tablet",
+          icon: "https://cdn-icons-png.flaticon.com/128/2002/2002580.png",
+        },
+        whenToTake: "When To Take",
+        frequency: "",
+        startTime: Date.now(),
+        endTime: undefined,
+        reminder: undefined,
+        status: "pending",
+        email: user?.email as string,
+        dateRange: [],
+      });
+      router.push("/");
     } catch (error) {
       console.error(error, "error writing document");
     } finally {
@@ -74,9 +96,10 @@ const MedicineForm = () => {
     });
   };
 
-  const formateTime = (value: Date | undefined) => {
+  const formateTime = (value: Date | undefined | number) => {
     if (value === undefined) return undefined;
-    return value.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const date = new Date(value);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
   return (
@@ -177,7 +200,11 @@ const MedicineForm = () => {
         changeFormValue={(date) => changeFormValue("reminder", date)}
         icon={<Ionicons style={styles.icon} name="timer-outline" size={20} />}
         isIcon={true}
-        value={formValue.reminder}
+        value={
+          typeof formValue.reminder === "number"
+            ? new Date(formValue.reminder)
+            : undefined
+        }
         placeholder="Reminder"
         mode="time"
         formattedValue={formateTime(formValue.reminder)}
