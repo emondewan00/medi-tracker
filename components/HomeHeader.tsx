@@ -12,7 +12,7 @@ const HomeHeader = () => {
         {user?.displayName ? user.displayName : "Anonymous"}
       </Text>
       <Link href={"/add-medicine"}>
-        <AntDesign name="medicinebox" size={24} color="blue" />
+        <AntDesign name="medicinebox" size={24} color="#007dfc" />
       </Link>
     </View>
   );

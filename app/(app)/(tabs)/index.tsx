@@ -1,8 +1,10 @@
 import { Link, router } from "expo-router";
 import {
+  ActivityIndicator,
   Button,
   FlatList,
   Image,
+  Pressable,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -30,7 +32,7 @@ export default function Index() {
   );
   const [medicines, setMedicines] = useState<DocumentData[]>([]);
   const [loading, setLoading] = useState(false);
-  const { logout, user } = useAuth();
+  const { user } = useAuth();
 
   useEffect(() => {
     const getMedications = async () => {
@@ -48,7 +50,7 @@ export default function Index() {
 
         const data: DocumentData[] = [];
         medications.forEach((medication) => {
-          data.push(medication.data());
+          data.push({ ...medication.data(), id: medication.id });
         });
         setMedicines(data);
       } catch (error) {
@@ -59,6 +61,64 @@ export default function Index() {
     };
     getMedications();
   }, [selectedDate, user?.email]);
+
+  let content = null;
+
+  if (loading) {
+    content = (
+      <View style={{ flex: 1 }}>
+        <ActivityIndicator size={"large"} />
+      </View>
+    );
+  } else if (medicines.length > 0) {
+    content = (
+      <View className="gap-y-4">
+        {medicines.map((medicine) => (
+          <Pressable
+            onPress={() =>
+              router.push({
+                pathname: "/notify",
+                params: { id: medicine.id, selectedDate },
+              })
+            }
+            key={medicine.id}
+            className="bg-blue-400 rounded-xl flex-row p-4 gap-x-4 border border-lightGrayBorder"
+          >
+            <View className="p-4 bg-white rounded-lg items-center ">
+              <Image
+                source={{
+                  uri: medicine.type.icon,
+                }}
+                className="w-12 h-12"
+                resizeMode="contain"
+                alt="capsule"
+              />
+            </View>
+            <View>
+              <Text className="text-xl font-semibold text-white">
+                {medicine.name}
+              </Text>
+              <Text className="font-medium text-white">
+                {medicine.whenToTake}
+              </Text>
+              <Text className="text-white">{medicine.frequency}</Text>
+            </View>
+            <View className="bg-white rounded-md p-2 items-center justify-center ml-auto">
+              <Ionicons name="timer-outline" size={24} />
+              <Text className="font-semibold">
+                {new Date(medicine.reminder).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </Text>
+            </View>
+          </Pressable>
+        ))}
+      </View>
+    );
+  } else {
+    content = <EmptyMedication />;
+  }
 
   return (
     <ScrollView className=" flex-1 bg-white h-full">
@@ -71,7 +131,7 @@ export default function Index() {
             resizeMode="cover"
             alt="medicine"
           />
-          {/* <View> */}
+
           <Text className="text-2xl font-bold">Your Medication Reminder</Text>
 
           <FlatList
@@ -103,49 +163,8 @@ export default function Index() {
             )}
             contentContainerClassName="gap-x-4 my-3"
           />
-          {/* </View> */}
 
-          {medicines.length > 0 ? (
-            <View className="gap-y-4">
-              {medicines.map((medicine, index) => (
-                <View
-                  key={index}
-                  className="bg-blue-400 rounded-xl flex-row p-4 gap-x-4 border border-lightGrayBorder"
-                >
-                  <View className="p-4 bg-white rounded-lg items-center ">
-                    <Image
-                      source={{
-                        uri: medicine.type.icon,
-                      }}
-                      className="w-12 h-12"
-                      resizeMode="contain"
-                      alt="capsule"
-                    />
-                  </View>
-                  <View>
-                    <Text className="text-xl font-semibold text-white">
-                      {medicine.name}
-                    </Text>
-                    <Text className="font-medium text-white">
-                      {medicine.whenToTake}
-                    </Text>
-                    <Text className="text-white">{medicine.frequency}</Text>
-                  </View>
-                  <View className="bg-white rounded-md p-2 items-center justify-center ml-auto">
-                    <Ionicons name="timer-outline" size={24} />
-                    <Text className="font-semibold">
-                      {new Date(medicine.reminder).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </Text>
-                  </View>
-                </View>
-              ))}
-            </View>
-          ) : (
-            <EmptyMedication />
-          )}
+          {content}
         </View>
       </View>
     </ScrollView>
