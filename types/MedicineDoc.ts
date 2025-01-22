@@ -1,13 +1,15 @@
 type InputValue = {
   name: string;
-  type: string;
+  type: { name: string; icon: string };
   whenToTake: string;
   frequency: string;
+  email: string;
+  dateRange: string[];
 };
 
 interface MedicineDoc extends InputValue {
-  startTime: Date;
-  endTime: undefined | Date;
+  startTime: number;
+  endTime: undefined | number;
   reminder: undefined | Date;
   status: "pending" | "taken" | "missed";
 }

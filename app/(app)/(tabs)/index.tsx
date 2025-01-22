@@ -15,26 +15,52 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import useAuth from "@/hooks/useAuth";
 import sevenDayTime from "@/utils/sevenDayTime";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  DocumentData,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import { fireStore } from "@/firebase.config";
 
 export default function Index() {
-  const [selectedDate, setSelectedDate] = useState(0);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toLocaleDateString()
+  );
+  const [medicines, setMedicines] = useState<DocumentData[]>([]);
+  const [loading, setLoading] = useState(false);
   const { logout, user } = useAuth();
 
   useEffect(() => {
     const getMedications = async () => {
-      const medicineRef = collection(fireStore, "medicine");
+      try {
+        setLoading(true);
+        const medicineRef = collection(fireStore, "medicine");
 
-      const documents = query(medicineRef, where("email", "==", user?.email));
+        const documents = query(
+          medicineRef,
+          where("email", "==", user?.email),
+          where("dateRange", "array-contains", selectedDate)
+        );
 
-      const medications = await getDocs(documents);
+        const medications = await getDocs(documents);
 
-      console.log(medications.docs, medications.size);
+        const data: DocumentData[] = [];
+        medications.forEach((medication) => {
+          data.push(medication.data());
+        });
+        setMedicines(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
     };
     getMedications();
-  }, []);
+  }, [selectedDate, user?.email]);
 
+  console.log(medicines.length,"selected")
   return (
     <ScrollView className=" flex-1 bg-white h-full">
       <View>
@@ -55,21 +81,25 @@ export default function Index() {
               data={sevenDayTime()}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  onPress={() => setSelectedDate(item.id)}
+                  onPress={() => setSelectedDate(item.fullDate)}
                   className={` py-4 px-7 border-lightGrayBorder border rounded-md ${
-                    item.id === selectedDate ? "bg-primary" : "bg-gray-50"
+                    item.fullDate === selectedDate ? "bg-primary" : "bg-gray-50"
                   }`}
                 >
                   <Text
                     className={`text-lg font-medium ${
-                      item.id === selectedDate ? "text-white" : "text-black"
+                      item.fullDate === selectedDate
+                        ? "text-white"
+                        : "text-black"
                     }`}
                   >
                     {item.day}
                   </Text>
                   <Text
-                    className={`text-xl font-semibold ${
-                      item.id === selectedDate ? "text-white" : "text-black"
+                    className={`text-xl font-semibold text-center ${
+                      item.fullDate === selectedDate
+                        ? "text-white"
+                        : "text-black"
                     }`}
                   >
                     {item.date}

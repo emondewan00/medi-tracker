@@ -35,8 +35,13 @@ const DateInput: React.FC<DateInputProps> = ({
           value={value || new Date()}
           mode={mode}
           onChange={(e, date) => {
-            setShowTimer(false);
-            changeFormValue(date);
+            if (mode === "date") {
+              setShowTimer(false);
+              changeFormValue(e.nativeEvent.timestamp);
+            } else {
+              setShowTimer(false);
+              changeFormValue(date);
+            }
           }}
         />
       )}

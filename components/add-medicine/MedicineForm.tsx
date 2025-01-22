@@ -19,31 +19,41 @@ import { fireStore } from "@/firebase.config";
 import useAuth from "@/hooks/useAuth";
 import DateInput from "./DateInput";
 import { MedicineDoc } from "@/types";
+import dateRangeArray from "@/utils/dateRangeArray";
 
 const MedicineForm = () => {
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
   const [formValue, setFormValue] = useState<MedicineDoc>({
     name: "",
-    type: "Tablet",
+    type: {
+      name: "Tablet",
+      icon: "https://cdn-icons-png.flaticon.com/128/2002/2002580.png",
+    },
     whenToTake: "When To Take",
     frequency: "",
-    startTime: new Date(),
+    startTime: Date.now(),
     endTime: undefined,
     reminder: undefined,
     status: "pending",
+    email: user?.email as string,
+    dateRange: [],
   });
 
-  const changeFormValue = (name: string, value: string | Date | undefined) => {
+  const changeFormValue = (name: string, value: any) => {
     setFormValue({ ...formValue, [name]: value });
   };
 
   const onPress = async (data: any) => {
     try {
       setLoading(true);
-      const docRef = await addDoc(collection(fireStore, "medicine"), {
+      await addDoc(collection(fireStore, "medicine"), {
         ...data,
         email: user?.email,
+        dateRange: dateRangeArray(
+          formValue.startTime,
+          formValue.endTime as number
+        ),
       });
     } catch (error) {
       console.error(error, "error writing document");
@@ -52,10 +62,12 @@ const MedicineForm = () => {
     }
   };
 
-  const formateDate = (value: Date | undefined) => {
+  const formateDate = (value: Date | undefined | number) => {
     if (value === undefined) return undefined;
 
-    return value.toLocaleDateString([], {
+    const date = new Date(value);
+
+    return date.toLocaleDateString([], {
       day: "numeric",
       month: "short",
       year: "numeric",
@@ -85,13 +97,13 @@ const MedicineForm = () => {
         renderItem={({ item }) => (
           <TouchableOpacity
             className={`py-3 px-4 border border-lightGrayBorder rounded ${
-              formValue.type === item.name ? "bg-primary" : "bg-white"
+              formValue.type.name === item.name ? "bg-primary" : "bg-white"
             }`}
-            onPress={() => changeFormValue("type", item.name)}
+            onPress={() => changeFormValue("type", item)}
           >
             <Text
               className={`${
-                formValue.type === item.name ? "text-white" : "text-black"
+                formValue.type.name === item.name ? "text-white" : "text-black"
               }`}
             >
               {item.name}
@@ -136,7 +148,7 @@ const MedicineForm = () => {
             <Ionicons style={styles.icon} name="calendar-outline" size={20} />
           }
           isIcon={true}
-          value={formValue.startTime}
+          value={new Date(formValue.startTime)}
           formattedValue={formateDate(formValue.startTime)}
           changeFormValue={(date) => changeFormValue("startTime", date)}
           placeholder="Start date"
@@ -148,7 +160,11 @@ const MedicineForm = () => {
             <Ionicons style={styles.icon} name="calendar-outline" size={20} />
           }
           isIcon={true}
-          value={formValue.endTime}
+          value={
+            typeof formValue.endTime === "number"
+              ? new Date(formValue.endTime)
+              : undefined
+          }
           formattedValue={formateDate(formValue.endTime)}
           changeFormValue={(date) => changeFormValue("endTime", date)}
           placeholder="End date"
