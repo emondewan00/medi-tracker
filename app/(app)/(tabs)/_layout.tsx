@@ -18,12 +18,12 @@ export default function RootLayout() {
         }}
       />
       <Tabs.Screen
-        name="addNew"
+        name="history"
         options={{
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="plus" size={size} color={color} />
+            <FontAwesome name="history" size={size} color={color} />
           ),
-          tabBarLabel: "Add New",
+          tabBarLabel: "History",
         }}
       />
       <Tabs.Screen

@@ -25,6 +25,7 @@ import {
   where,
 } from "firebase/firestore";
 import { fireStore } from "@/firebase.config";
+import ScrollAbleDates from "@/components/ScrollAbleDates";
 
 export default function Index() {
   const [selectedDate, setSelectedDate] = useState(
@@ -133,35 +134,10 @@ export default function Index() {
           />
 
           <Text className="text-2xl font-bold">Your Medication Reminder</Text>
-
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={sevenDayTime()}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => setSelectedDate(item.fullDate)}
-                className={` py-4 px-7 border-lightGrayBorder border rounded-md ${
-                  item.fullDate === selectedDate ? "bg-primary" : "bg-gray-50"
-                }`}
-              >
-                <Text
-                  className={`text-lg font-medium ${
-                    item.fullDate === selectedDate ? "text-white" : "text-black"
-                  }`}
-                >
-                  {item.day}
-                </Text>
-                <Text
-                  className={`text-xl font-semibold text-center ${
-                    item.fullDate === selectedDate ? "text-white" : "text-black"
-                  }`}
-                >
-                  {item.date}
-                </Text>
-              </TouchableOpacity>
-            )}
-            contentContainerClassName="gap-x-4 my-3"
+          <ScrollAbleDates
+            dates={sevenDayTime()}
+            onPress={setSelectedDate}
+            selectedDate={selectedDate}
           />
 
           {content}
