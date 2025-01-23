@@ -72,7 +72,7 @@ export default function Index() {
     );
   } else if (medicines.length > 0) {
     content = (
-      <View className="gap-y-4">
+      <View className="gap-y-4 pb-4">
         {medicines.map((medicine) => (
           <Pressable
             onPress={() =>
