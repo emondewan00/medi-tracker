@@ -6,7 +6,7 @@ import MedicineForm from "@/components/add-medicine/MedicineForm";
 const AddMedicine = () => {
   return (
     <ScrollView>
-      <View>
+      <View className="pb-10">
         <MedicineHeader />
         <MedicineForm />
       </View>

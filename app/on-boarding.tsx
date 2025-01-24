@@ -1,6 +1,6 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
-import onBoarding from "@/assets/images/login.png";
+import onBoarding from "@/assets/images/home-medi-track.jpg";
 import { Link } from "expo-router";
 
 const OnBoarding = () => {

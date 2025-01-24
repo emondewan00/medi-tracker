@@ -104,7 +104,7 @@ const MedicineContent: React.FC<{
   } else {
     content = <EmptyMedication />;
   }
-  return content;
+  return <View className="pb-10">{content}</View>;
 };
 
 export default MedicineContent;
