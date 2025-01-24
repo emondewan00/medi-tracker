@@ -1,50 +1,82 @@
-# Welcome to your Expo app 👋
+# React Native Medicine Tracker App  
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This React Native application allows users to effectively track their medicine usage.  
 
-## Get started
+## About the Project  
 
-1. Install dependencies
+This project idea is inspired by a tutorial from **TubeGuruji** on YouTube.  
+- **TubeGuruji YouTube Channel**: [Link](https://www.youtube.com/@tubeguruji)  
+- **Original Project Tutorial**: [Watch Here](https://youtu.be/2ua_Eu0LhcI?si=mlsOL7cr-CQDNhZA)  
 
+### Differences Between My Project and TubeGuruji's Project  
+
+| Feature/Aspect                    | My Project                                      | TubeGuruji's Project                       |
+|-----------------------------------|------------------------------------------------|-------------------------------------------|
+| **Styling**                       | NativeWind for modern, utility-first styling   | Vanilla CSS                               |
+| **Code Reusability & Structure**  | Well-structured and reusable components        | Not reusable or well-structured           |
+| **Routing**                       | Follows Expo guide for protected routes        | Basic routing implementation              |
+| **Authentication Logic**          | Centralized using Context API                  | Decentralized                             |
+| **Persistence**                   | Firebase native feature for user persistence   | `asyncStorage` for user persistence       |
+| **Language**                      | TypeScript for type safety                     | JavaScript                                |
+| **Source Code Availability**      | Available in this repository                   | Source code is not provided               |
+
+## Features  
+
+### Authentication  
+- **Firebase Integration**:  
+  - User authentication for sign-up and login.  
+  - Persistent user sessions to keep users logged in even after app reload or close.  
+
+### Medicine Management  
+- Users can add new medicines with relevant details.  
+- Update medicine status:  
+  - **Taken**  
+  - **Missed**  
+
+### Routing  
+- **Public and Private Routes**:  
+  - Public routes for general access.  
+  - Private routes for authenticated users.  
+
+### History Page  
+- View a detailed history of medicine intake, including statuses and timestamps.  
+
+## Technologies Used  
+- **React Native**: For building the mobile application.  
+- **NativeWind**: For modern, utility-first styling.  
+- **Firebase**:  
+  - Authentication for user login and registration.  
+  - Firestore database for storing and managing medicine data.  
+  - Native user persistence feature.  
+- **TypeScript**: For type safety and better development experience.  
+
+
+## Installation  
+
+1. Clone the repository:  
    ```bash
-   npm install
+   git clone https://github.com/emondewan00/medi-tracker 
    ```
-
-2. Start the app
-
-   ```bash
+2. Navigate to the project directory:
+    ```bash 
+    cd medicine-tracker-app
+    ```
+3. Install dependencies:
+    ```bash
+    npm install
+    ```
+4. Start the app
+    ```bash 
     npx expo start
-   ```
+     ```
 
-In the output, you'll find options to open the app in a
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## User Experience  
+- **Session Persistence**:  
+  - Users stay logged in after app reload or reopening.  
+- Clean and user-friendly interface for tracking and managing medicines.  
 
-## Get a fresh project
+---
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Feel free to contribute or report any issues! 😊  
